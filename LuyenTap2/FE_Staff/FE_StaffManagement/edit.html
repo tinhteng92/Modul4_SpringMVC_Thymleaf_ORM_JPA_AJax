@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h2>Show Customer</h2>
+    <a href="home.html" class="btn btn-success">Back to staff list</a>
+    <br>
+    <br>
+
+    <table class="table" id="tableEdit">
+        <thead>
+        <tr>
+            <th>Staff Code</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Department</th>
+        </tr>
+        </thead>
+        <tbody id="tbodyEdit">
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+<script>
+    function getEdit(id){
+        $.ajax({
+            type: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/staff/" + id,
+            //xử lý khi thành công
+            success: function (data) {
+                console.log(data);
+                document.getElementById("tbodyEdit").innerHTML = showDataEdit(data);
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+    }
+
+    function showDataEdit(staff){
+        return `<tr>
+            <td><input id="id" value="${staff.id}" readonly></td>
+            <td><input id="name" value="${staff.name}" ></td>
+            <td><input id="age" value="${staff.age}" ></td>
+            <td><input id="salary" value="${staff.salary}" ></td>
+            <td>
+                <select id="id_dep">
+                    <option value="1">Kế toán</option>
+                    <option value="2">Kĩ thuật</option>
+                    <option value="3">Kinh doanh</option>
+                </select>
+            </td>
+        </tr>
+        <button onclick="saveEdit()">Edit</button>`
+    }
+
+    function saveEdit() {
+        let id = $("#id").val();
+        let name = $("#name").val();
+        let age = $("#age").val();
+        let salary = $("#salary").val();
+        let idDepartment = $('#id_dep').val();
+        let staff = {
+            id: id,
+            name: name,
+            age: age,
+            salary: salary,
+            department: {
+                id_dep: idDepartment
+            }
+        }
+
+        console.log(staff);
+
+        // let staff = {
+        //     id: document.getElementById("id").value,
+        //     name: document.getElementById("name").value,
+        //     age: document.getElementById("age").value,
+        //     salary: document.getElementById("salary").value,
+        //     department: document.getElementById("department").value,
+        // }
+        $.ajax({
+            type: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/staff",
+            data: JSON.stringify(staff),
+            //xử lý khi thành công
+            success: function (data) {
+                alert("update thành công");
+                window.location.href="home.html";
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+    }
+
+
+
+</script>

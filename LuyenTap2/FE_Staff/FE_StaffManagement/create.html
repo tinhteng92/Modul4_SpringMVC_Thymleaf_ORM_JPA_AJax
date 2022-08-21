@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Basic Table</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Salary</th>
+            <th>Department</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input id="name"></td>
+            <td><input id="age"></td>
+            <td><input id="salary" ></td>
+            <td>
+                <select id="id_dep">
+                    <option value="1">Kế toán</option>
+                    <option value="2">Kĩ thuật</option>
+                    <option value="3">Kinh doanh</option>
+                </select>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+    <button onclick="create()">Create</button>
+</div>
+
+</body>
+</html>
+<script>
+    function create(){
+        let name = $('#name').val();
+        let age = $('#age').val();
+        let salary = $('#salary').val();
+        let idDepartment = $('#id_dep').val();
+
+        let staff = {
+            name: name,
+            age: age,
+            salary: salary,
+            department: {
+                id_dep: idDepartment
+            }
+        }
+
+        console.log(staff)
+
+        $.ajax({
+            type: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/staff",
+            data: JSON.stringify(staff),
+            //xử lý khi thành công
+            success: function () {
+                alert("tạo thành công");
+                location.href = "home.html";
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+
+    }
+</script>
